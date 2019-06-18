@@ -13,7 +13,7 @@
 # limitations under the License.
 
 FROM alpine:3.9
-MAINTAINER Levente Kale <levente.kale@nokia.com> 
+MAINTAINER Levente Kale <levente.kale@nokia.com>
 
 ARG VERSION
 ENV FLUENTD_VERSION=$VERSION
@@ -48,6 +48,7 @@ RUN apk update \
 &&  gem install fluent-plugin-record-reformer \
 &&  gem install fluent-plugin-rewrite-tag-filter \
 &&  gem install fluent-plugin-elasticsearch \
+&&  gem install fluent-plugin-remote_syslog \
 &&  gem install fluent-plugin-kubernetes_metadata_filter \
 &&  gem install bigdecimal \
 &&  gem install etc \
@@ -60,8 +61,3 @@ RUN apk update \
 &&  mkdir -p /fluentd/etc /fluentd/plugins \
 &&  chmod +x /bin/entrypoint.sh \
 &&  chmod 700 /fluentd/log
-
-# Copy configuration files
-# TODO: change it to a dynamic ConfigMap, in case something needs to be run-time configurable
-COPY ./conf/fluent.conf /fluentd/etc/
-
