@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "2041683d_b6c11ed0",
+        "filename": "SPECS/fluentd.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 233
+      },
+      "writtenOn": "2019-06-18T11:43:00Z",
+      "side": 1,
+      "message": "We need to bump rpm version everytime we touch anything inside.",
+      "revId": "a1633f84b0ff780c14c89706260ac2172fe4873f",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "6c0fb86f_fe940014",
         "filename": "SPECS/fluentd.spec",
         "patchSetId": 1
