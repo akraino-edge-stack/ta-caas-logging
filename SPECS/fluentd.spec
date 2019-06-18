@@ -15,7 +15,7 @@
 %define COMPONENT fluentd
 %define RPM_NAME caas-%{COMPONENT}
 %define RPM_MAJOR_VERSION 1.4.1
-%define RPM_MINOR_VERSION 1
+%define RPM_MINOR_VERSION 2
 %define IMAGE_TAG %{RPM_MAJOR_VERSION}-%{RPM_MINOR_VERSION}
 
 Name:           %{RPM_NAME}
@@ -62,27 +62,10 @@ docker rmi -f %{COMPONENT}:%{IMAGE_TAG}
 mkdir -p %{buildroot}/%{_caas_container_tar_path}/
 rsync -av %{_builddir}/%{RPM_NAME}-%{RPM_MAJOR_VERSION}/docker-save/%{COMPONENT}:%{IMAGE_TAG}.tar %{buildroot}/%{_caas_container_tar_path}/
 
-mkdir -p %{buildroot}/%{_playbooks_path}/
-rsync -av ansible/playbooks/fluentd.yaml %{buildroot}/%{_playbooks_path}/
-
-mkdir -p %{buildroot}/%{_roles_path}/
-rsync -av ansible/roles/fluentd %{buildroot}/%{_roles_path}/
-
 %files
 %{_caas_container_tar_path}/%{COMPONENT}:%{IMAGE_TAG}.tar
-%{_playbooks_path}/fluentd.yaml
-%{_roles_path}/fluentd
 
 %preun
-
 %post
-mkdir -p %{_postconfig_path}/
-ln -sf %{_playbooks_path}/fluentd.yaml %{_postconfig_path}/
-
-%postun
-if [ $1 -eq 0 ]; then
-    rm -f %{_postconfig_path}/fluentd.yaml
-fi
-
 %clean
 rm -rf ${buildroot}
