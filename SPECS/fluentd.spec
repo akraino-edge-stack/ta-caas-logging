@@ -70,7 +70,6 @@ rsync -av ansible/roles/fluentd %{buildroot}/%{_roles_path}/
 
 %files
 %{_caas_container_tar_path}/%{COMPONENT}:%{IMAGE_TAG}.tar
-%{_playbooks_path}/fluentd.yaml
 %{_roles_path}/fluentd
 
 %preun
