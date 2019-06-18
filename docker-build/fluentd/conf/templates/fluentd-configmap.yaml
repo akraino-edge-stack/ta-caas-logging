@@ -1,0 +1,138 @@
+{{- define "es_infra.part" }}
+{{- template "es_begin.part"}}
+{{- with . }}
+       host {{ .host }}
+       port {{ .port }}
+       scheme {{ .scheme }}
+       logstash_prefix {{ .logstash_prefix }}
+{{- end }}
+       user elastic
+       password changeme
+{{- template "es_end.part"}}
+{{- end }}
+{{- define "es_log.part" }}
+{{- template "es_begin.part"}}
+{{- include "caas.url_parser" . }}
+{{- include "caas.scheme_parser" . }}
+       user elastic
+       password changeme
+{{- end }}
+{{- define "es_begin.part" }}
+    <match kubernetes**>
+       @type elasticsearch
+       @log_level info
+       include_tag_key true
+{{- end }}
+{{- define "es_end.part" }}
+       ssl_verify true
+       reload_connections true
+       logstash_format true
+       reconnect_on_error true
+       resurrect_after 5s
+       <buffer tag>
+          chunk_limit_size 256m
+          flush_at_shutdown true
+          flush_interval 5s
+          flush_thread_count 2
+       </buffer>
+    </match>
+{{- end }}
+{{- define "remote_syslog.part" }}
+    <match kubernetes**>
+      @type remote_syslog
+{{- if  . }}
+{{- include "caas.url_parser" . }}
+{{- include "caas.protocol_parser" . }}
+{{- else}}
+       host rsyslog-master
+       port 1025
+       protocol tcp
+{{- end }}
+      <buffer>
+        chunk_limit_size 256m
+        flush_at_shutdown "true"
+      </buffer>
+    </match>
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-cm
+  namespace: kube-system
+data:
+  fluent.conf: |-
+{{- $no_ws := 0 }}
+{{- if .Values.fluentd.log_forwarding }}
+{{- $no_ws := len .Values.fluentd.log_forwarding }}
+{{- end }}
+    <system>
+      workers {{ add $no_ws 1 }}
+      root_dir /fluentd
+    </system>
+    <match fluent**>
+      @type null
+    </match>
+    <worker 0>
+{{- range .Values.fluentd.infra_name_spaces }}
+      <source>
+        @type tail
+        path /var/log/containers/*_{{ . }}_*.log
+        pos_file /var/lib/fluentd/fluentd-{{ . }}.log.pos
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        tag kubernetes.*
+        format json
+        read_from_head true
+      </source>
+{{- end }}
+      <filter kubernetes.**>
+        @type kubernetes_metadata
+        skip_labels true
+        skip_container_metadata true
+        skip_master_url true
+        skip_namespace_metadata true
+      </filter>
+{{- if .Values.elasticsearch.required}}
+{{ template "es_infra.part" .Values.elasticsearch }}
+{{- else }}
+{{ template "remote_syslog.part"  }}
+{{- end }}
+    </worker>
+{{- if .Values.fluentd.log_forwarding }}
+{{- range $index, $element := .Values.fluentd.log_forwarding }}
+    <worker {{ add $index 1 }}>
+      <source>
+        @type tail
+        path /var/log/containers/*_{{ $element.namespace }}-{{ $index }}_*.log
+        pos_file /var/lib/fluentd/fluentd-{{ $element.namespace }}-{{ $index }}.log.pos
+        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        tag kubernetes.*
+        format json
+        read_from_head true
+      </source>
+      <filter kubernetes.**>
+        @type kubernetes_metadata
+        skip_labels true
+        skip_container_metadata true
+        skip_master_url true
+        skip_namespace_metadata true
+      </filter>
+{{- if ne $element.stream "both" }}
+      <filter kubernetes.**>
+        @type grep
+        <regexp>
+          key stream
+          pattern /{{ .stream }}/
+        </regexp>
+      </filter>
+{{- end }}
+{{- if eq $element.plugin "elasticsearch"}}
+{{ template "es_log.part" $element.target_url}}
+       logstash_prefix {{ $element.namespace }}
+{{- template "es_end.part"}}
+{{- else }}
+{{ template "remote_syslog.part" $element.target_url}}
+{{- end }}
+    </worker>
+{{- end }}
+{{- end }}

@@ -1,0 +1,149 @@
+{{/*
+Copyright 2019 Nokia
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/}}
+{{ if .Values.elasticsearch.required }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch
+  namespace: kube-system
+  labels:
+    app: elasticsearch
+data:
+  elasticsearch.yml: |-
+    cluster.name: {{ .Values.elasticsearch.cluster.name }}
+
+    node.data: ${NODE_DATA:true}
+    node.master: ${NODE_MASTER:true}
+    node.ingest: ${NODE_INGEST:true}
+    node.name: ${HOSTNAME}
+
+    network.host: 0.0.0.0
+    bootstrap.memory_lock: ${BOOTSTRAP_MEMORY_LOCK:false}
+
+    discovery:
+      zen:
+        ping.unicast.hosts: ${DISCOVERY_SERVICE:}
+        minimum_master_nodes: ${MINIMUM_MASTER_NODES:2}
+
+    processors: ${PROCESSORS:}
+
+    # avoid split-brain w/ a minimum consensus of 3 masters plus 3 data nodes
+    gateway.expected_master_nodes: ${EXPECTED_MASTER_NODES:3}
+    gateway.expected_data_nodes: ${EXPECTED_DATA_NODES:3}
+    gateway.recover_after_time: ${RECOVER_AFTER_TIME:5m}
+    gateway.recover_after_master_nodes: ${RECOVER_AFTER_MASTER_NODES:3}
+    gateway.recover_after_data_nodes: ${RECOVER_AFTER_DATA_NODES:3}
+
+  log4j2.properties: |-
+    status = error
+    appender.console.type = Console
+    appender.console.name = console
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = [%d{ISO8601}][%-5p][%-25c{1.}] %marker%m%n
+    rootLogger.level = info
+    rootLogger.appenderRef.console.ref = console
+    logger.searchguard.name = com.floragunn
+    logger.searchguard.level = info
+
+  supervisord.conf: |
+    [unix_http_server]
+    file=/run/supervisord.sock   ; (the path to the socket file)
+    chmod = 0770
+    chown = root:root
+    username = dummy
+    password = dummy
+
+    ;[inet_http_server]         ; inet (TCP) server disabled by default
+
+    [supervisord]
+    user=root
+    logfile=/dev/null
+    logfile_maxbytes=0
+    loglevel=info
+    pidfile=/var/run/supervisor/supervisord.pid
+    nodaemon=true
+    minfds=1024
+    minprocs=200
+
+    [supervisorctl]
+    serverurl=unix:///run/supervisord.sock
+    username = dummy
+    password = dummy
+
+    [rpcinterface:supervisor]
+    supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+    [program:elasticsearch]
+    command=/usr/share/elasticsearch/bin/elasticsearch
+    user= {{ .Values.elasticsearch.es_uid }}
+    startsecs=3
+    startretries=1
+    stopwaitsecs = 3
+    priority = 1
+    redirect_stderr=true
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+
+    [program:crond]
+    command=/usr/sbin/crond -n -s
+    startsecs=3
+    startretries=1
+    stopwaitsecs = 3
+    priority = 2
+    redirect_stderr=true
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+
+    [program:setindex]
+    command=/usr/share/elasticsearch/elasticsearch-setindex
+    startsecs=3
+    startretries=1
+    stopwaitsecs = 3
+    priority = 2
+    redirect_stderr=true
+    stdout_logfile=/dev/stdout
+    stdout_logfile_maxbytes=0
+
+  elasticsearch-logrotate: |
+    #!/bin/bash
+    # Copyright 2019 Nokia
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+
+    FS_LIMIT=80
+
+    declare -i pcent=100
+
+
+    while [ $pcent -ge $FS_LIMIT ]
+    do
+        pcent=`df --output=pcent /usr/share/elasticsearch/data | tail -n1 | tr -d '%'`
+        if [ $pcent -le $FS_LIMIT ]; then exit; fi
+        oldest=`curl -s -XGET 'localhost:{{ .Values.elasticsearch.port }}/_cat/indices' | cut -d' ' -f3 | grep ^{{ .Values.elasticsearch.logstash_prefix }} | sort | head -n1`
+        curl -XDELETE "localhost:{{ .Values.elasticsearch.port }}/$oldest" >/dev/null
+    done
+{{ end }}

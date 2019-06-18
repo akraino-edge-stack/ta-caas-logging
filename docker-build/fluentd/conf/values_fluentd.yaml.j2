@@ -1,0 +1,26 @@
+fluentd:
+  image_name: {{ container_image_names | select('search', '/fluentd') | list | last }}
+  apiserver_service_name: {{ caas.apiserver_service_name }}
+  apiserver_svc_port: {{ caas.apiserver_svc_port }}
+  infra_name_spaces:
+{% if caas.infra_namespaces is defined %}
+{%- for item in caas.infra_namespaces %}
+  - {{ item }}
+{% endfor %}
+{% else %}
+  - kube-system
+{%- endif %}
+{%- if caas.log_forwarding is defined %}
+  log_forwarding:
+{% for item in caas.log_forwarding %}
+  - namespace: {{ item.namespace }}
+    target_url: "{{ item.target_url }}"
+    plugin: {{ item.plugin}}
+{% if item.stream is defined %}
+    stream: {{ item.stream}}
+{% else %}
+    stream: both
+{% endif %}
+{%- endfor %}
+{% endif %}
+  config_timestamp: {{ ansible_date_time.epoch }}

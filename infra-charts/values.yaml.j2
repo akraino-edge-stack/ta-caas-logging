@@ -1,0 +1,91 @@
+{#
+Copyright 2019 Nokia
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+#}
+---
+kubernetes_component_label: {{ caas.kubernetes_component_label }}
+registry_url: {{ caas.registry_url }}:{{ caas.registry_port }}
+registry_reponame: "{{ caas.registry_repo }}"
+domain: "{{ caas.dns_domain }}"
+apiserver_service_name: {{ caas.apiserver_service_name }}
+
+metrics_server:
+  required: true
+  port: {{ caas.metrics_server_port }}
+  container_version: {{ container_image_names | select('search', '/metrics_server') | list | last | regex_replace('.*:([\\w\\-_\\.]+)$', '\\1') }}
+
+prometheus:
+  required: true
+  port: {{ caas.prometheus_port }}
+  container_version: {{ container_image_names | select('search', '/prometheus') | list | last | regex_replace('.*:([\\w\\-_\\.]+)$', '\\1') }}
+  prometheus_url: {{ caas.prometheus }}
+  server_cert: {{ prometheus_cert_b64 }}
+  server_key: {{ prometheus_cert_key_b64 }}
+
+custom_metrics_api:
+  required: true
+  port: {{ caas.custom_metrics_api_port }}
+  serviceport: {{ caas.custom_metrics_api_serviceport }}
+  container_version: {{ container_image_names | select('search', '/custom_metrics') | list | last | regex_replace('.*:([\\w\\-_\\.]+)$', '\\1') }}
+  server_cert: {{ metrics_cert_b64 }}
+  server_key: {{ metrics_cert_key_b64 }}
+
+svcwatcher:
+  required: true
+  container_version: {{ container_image_names | select('search', '/svcwatcher') | list | last | regex_replace('.*:([\\w\\-_\\.]+)$', '\\1') }}
+
+netwatcher:
+  container_version: {{ container_image_names | select('search', '/netwatcher') | list | last | regex_replace('.*:([\\w\\-_\\.]+)$', '\\1') }}
+
+cpupooler:
+  required: true
+  webhook_conf_name: cpu-device-pod-mutator-webhook-config
+  webhook_svc_name: cpu-dev-pod-mutator-svc
+  secret_path: /var/run/secrets/kubernetes.io/serviceaccount
+  container_version: {{ container_image_names | select('search', '/cpupooler') | list | last | regex_replace('.*:([\\w\\-_\\.]+)$', '\\1') }}
+  webhook_ca_bundle: {{ webhooks_ca }}
+  webhook_port: {{ caas.webhook_port }}
+  cpu_poolconfigs:
+    {{ ansible_local['cpu_pooler_config'] | default([]) | to_nice_yaml | indent(4) }}
+
+elasticsearch:
+{% if caas.infra_log_store is defined and caas.infra_log_store != 'remote_syslog' %}
+  required: true
+{% endif %}
+  port: {{ caas.elasticsearch_port }}
+  scheme: {{ caas.elasticsearch_scheme }}
+  logstash_prefix: {{ caas.elasticsearch_logstash_prefix }}
+  image_name: {{ container_image_names | select('search', '/elasticsearch') | list | last }}
+  memory_limit: {{ caas.elasticsearch_memory_limit }}
+  cpu_limit: 1
+  memory_request: {{ caas.elasticsearch_memory_request }}
+  java_heap_request: {{ caas.elasticsearch_java_heap_request }}
+  java_heap_max: {{ caas.elasticsearch_java_heap_max }}
+  port_for_cluster_communication: {{ caas.elasticsearch_port_for_cluster_communication }}
+  es_uid: {{ caas.uid.elasticsearch }}
+  cluster:
+    name: "elasticsearch"
+  env:
+    MINIMUM_MASTER_NODES: "3"
+  master:
+    name: elasticsearch-master
+    replicas: 3
+  data:
+    name: elasticsearch-data
+    replicas: 3
+    terminationGracePeriodSeconds: 3600
+
+sriovdp:
+  required: true
+  image_name: {{ container_image_names | select('search', '/sriovdp') | list | last }}

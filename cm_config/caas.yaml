@@ -1,0 +1,114 @@
+---
+# Copyright 2019 Nokia
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+salt: malaise68Adroitness44Gradate45Probe41Settle46Newsweek93restrict8Thirsty35abused9Pluperfect
+max_login_time: 30
+max_parallel_session: 15
+ansible_success: 'Ansible deploy END success'
+docker_directory: /var/lib/docker
+cert_directory: /etc/docker
+caas_base_directory: "/var/lib/caas"
+infra_containers_directory: "{{ caas_base_directory }}/images"
+manifests_directory: "{{ caas_base_directory }}/manifests"
+registry_directory: /var/lib/registry
+libexec_dir: /usr/libexec/caas
+apiserver_in_hosts: apiserver.{{ dns_domain }}
+etcd_api_port: 4111
+etcd_peer_port: 4112
+kubernetes_component_label: akrec-image
+swift_url: swift.kube-system.svc.{{ dns_domain }}
+swift_port: 8084
+swift: https://{{ swift_url }}:{{ swift_port }}
+swift_update_url: swift-update.kube-system.svc.{{ dns_domain }}
+swift_memcached_port: 11222
+update_swift_port: 8091
+swift_update: https://{{ swift_update_url }}:{{ update_swift_port }}
+chart_repo_ip: 10.254.210.229
+chart_repo_url: chart-repo.kube-system.svc.{{ dns_domain }}
+chart_repo_port: 8088
+chart_repo: https://{{ chart_repo_url }}:{{ chart_repo_port }}
+tiller_ip: 10.254.165.237
+tiller_url: tiller.kube-system.svc.{{ dns_domain }}
+tiller_port: 44134
+tiller: https://{{ tiller_url }}:{{ tiller_port }}
+registry_url: registry.kube-system.svc.{{ dns_domain }}
+registry_port: 5555
+registry: https://{{ registry_url }}:{{ registry_port }}
+registry_repo: "caas"
+update_registry_url: registry-update.kube-system.svc.{{ dns_domain }}
+update_registry_port: 5556
+update_registry: https://{{ update_registry_url }}:{{ update_registry_port }}
+elasticsearch_url: elasticsearch-logging.kube-system.svc.{{ dns_domain }}
+elasticsearch_port: 9200
+elasticsearch_scheme: http
+elasticsearch_logstash_prefix: caas
+elasticsearch_memory_request: 1Gi
+elasticsearch_memory_limit: 2Gi
+elasticsearch_java_heap_request: 800m
+elasticsearch_java_heap_max: 800m
+elasticsearch_port_for_cluster_communication: 9300
+elasticsearch: https://{{ elasticsearch_url }}:{{ elasticsearch_port }}
+internal_flannel_interface: eth0
+container_wait_timeout: 120
+ldap_master_url: master.infraldap-server.{{ dns_domain }}
+ldap_slave_url: infraldap-server-slave.kube-system.svc.{{ dns_domain }}
+apiserver_secure_port: 6443
+apiserver_svc_port: 443
+default_partition_size: 16
+danmnet_default_name: flannel
+danmnet_default_namespace: kube-system
+danmnet_default_network_id: flannel
+danmnet_default_network_type: flannel
+caas_chart_path: "{{ caas_base_directory }}/infra-charts"
+caas_policy_directory: "{{ caas_base_directory }}/policies"
+kubernetes_service_url: kubernetes.default.svc
+prometheus_port: 9090
+prometheus_url: prometheus.kube-system.svc.{{ dns_domain }}
+prometheus: https://{{ prometheus_url }}:{{ prometheus_port }}
+custom_metrics_api_port: 6443
+custom_metrics_api_serviceport: 443
+metrics_server_port: 443
+token_filename: token
+tokenscsv_filename: tokens.csv
+cert_path: /etc/kubernetes/ssl
+_secrets_conf: secrets.conf
+kubernetes_secret_users: kube
+service_cluster_ip_cidr: "10.254.0.0/16"
+apiserver_svc_ip: "10.254.0.1"
+dns_svc_ip: "10.254.0.254"
+apiserver_service_name: "kubernetes.default.svc.{{ dns_domain }}"
+rbac_manifests_directory: "{{ caas_base_directory }}/rbac_manifests"
+webhook_port: 443
+root_partition: "/dev/vda"
+uid:
+  docker: 142
+  caas_etcd: 143
+  kube: 144
+  kubedns: 145
+  swift: 146
+  danm: 147
+  dockerreg: 149
+  chartrepo: 150
+  elasticsearch: 202
+  flannel: 666
+infra_namespaces:
+  - kube-system
+cpu_allocation_mapping:
+  caas_exclusive:
+    pool_name: exclusive_caas
+  caas_shared:
+    pool_name: shared_caas
+  caas_default:
+    pool_name: default
