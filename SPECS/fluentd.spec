@@ -15,14 +15,14 @@
 %define COMPONENT fluentd
 %define RPM_NAME caas-%{COMPONENT}
 %define RPM_MAJOR_VERSION 1.6.3
-%define RPM_MINOR_VERSION 0
+%define RPM_MINOR_VERSION 1
 %define IMAGE_TAG %{RPM_MAJOR_VERSION}-%{RPM_MINOR_VERSION}
 
 Name:           %{RPM_NAME}
 Version:        %{RPM_MAJOR_VERSION}
 Release:        %{RPM_MINOR_VERSION}%{?dist}
 Summary:        Containers as a Service Fluentd component
-License:        %{_platform_license} and MIT license and Apache License and BSD 3-clause New or Revised License and Ruby License and BSD and Mozilla Public License and BSD 3-clause New or Revised License
+License:        %{_platform_license} and Commercial and MIT license and Apache License and BSD 3-clause New or Revised License and Ruby License and BSD and Mozilla Public License and BSD 3-clause New or Revised License
 URL:            https://github.com/fluent/fluentd
 BuildArch:      x86_64
 Vendor:         %{_platform_vendor} and fluent/fluentd unmodified
