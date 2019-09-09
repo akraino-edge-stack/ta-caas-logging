@@ -37,29 +37,13 @@ RUN groupadd -g 202 elasticsearch \
       supervisor \
 &&  yum clean all \
 &&  curl -fsSL ${ES_TARBAL} | tar zx --strip-components=1 \
-&&  echo "===> Creating Elasticsearch Paths..." \
-    && for path in \
-  	/usr/share/elasticsearch/data \
-  	/usr/share/elasticsearch/logs \
-  	/usr/share/elasticsearch/config \
-  	/usr/share/elasticsearch/config/scripts \
-  	/usr/share/elasticsearch/plugins \
-    ; do \
-        mkdir -p "$path"; \
-        chown -R elasticsearch:elasticsearch "$path"; \
-    done
-
-COPY config/elastic /usr/share/elasticsearch/config
-COPY config/logrotate /etc/logrotate.d/elasticsearch
-COPY healthcheck /usr/local/bin/
-COPY elasticsearch-setindex /usr/share/elasticsearch
-
-RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch /etc/logrotate.d/elasticsearch /usr/local/bin/healthcheck \
-&&  chmod +x /usr/share/elasticsearch/elasticsearch-setindex \
+&&  chown -R elasticsearch:elasticsearch /usr/share/elasticsearch \
 # workaround for Elasticsearch: this way ES can list the used plugins, and remove the jdk folder (open jdk slimmer)
 &&  cp -al /usr/share/elasticsearch/modules/* /usr/share/elasticsearch/plugins/ \
-&&  chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/plugins \
-&&  rm -rf /usr/share/elasticsearch/jdk
+&&  rm -rf /usr/share/elasticsearch/jdk \
 # workaround end
+&&  sed '/GC logging/Q' -i /usr/share/elasticsearch/config/jvm.options   # disable GC logging
 
-CMD ["elasticsearch"]
+COPY elasticsearch-logrotate.sh /etc/cron.hourly/
+COPY elasticsearch-setindex.sh /usr/share/elasticsearch/
+COPY log4j2.properties /usr/share/elasticsearch/config/
