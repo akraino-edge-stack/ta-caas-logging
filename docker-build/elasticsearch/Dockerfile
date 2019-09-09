@@ -44,22 +44,13 @@ RUN groupadd -g 202 elasticsearch \
   	/usr/share/elasticsearch/config \
   	/usr/share/elasticsearch/config/scripts \
   	/usr/share/elasticsearch/plugins \
-    ; do \
-        mkdir -p "$path"; \
-        chown -R elasticsearch:elasticsearch "$path"; \
-    done
-
-COPY config/elastic /usr/share/elasticsearch/config
-COPY config/logrotate /etc/logrotate.d/elasticsearch
-COPY healthcheck /usr/local/bin/
-COPY elasticsearch-setindex /usr/share/elasticsearch
-
-RUN chown -R elasticsearch:elasticsearch /usr/share/elasticsearch /etc/logrotate.d/elasticsearch /usr/local/bin/healthcheck \
-&&  chmod +x /usr/share/elasticsearch/elasticsearch-setindex \
+    ; do mkdir -p "$path"; done \
+&& chown -R elasticsearch:elasticsearch /usr/share/elasticsearch \
 # workaround for Elasticsearch: this way ES can list the used plugins, and remove the jdk folder (open jdk slimmer)
 &&  cp -al /usr/share/elasticsearch/modules/* /usr/share/elasticsearch/plugins/ \
 &&  chown -R elasticsearch:elasticsearch /usr/share/elasticsearch/plugins \
-&&  rm -rf /usr/share/elasticsearch/jdk
+&&  rm -rf /usr/share/elasticsearch/jdk \
 # workaround end
+&&  sed '/GC logging/q' -i /usr/share/elasticsearch/config/jvm.options   # disable GC logging
 
 CMD ["elasticsearch"]
