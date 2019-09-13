@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "d8c90e2d_d4c35305",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-09-13T15:14:44Z",
+      "side": 0,
+      "message": "it should be done because based on our recent failure, port check is not enough\nafter the out of heap errors ES was basically dead, but it was IMO still listening\n\ncan be done separately of course",
+      "parentUuid": "81ae349e_f3ce3117",
+      "revId": "e44199dbf3af9d714be1e8717707eb8ad661239f",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "16cbc862_bd259f53",
         "filename": "docker-build/elasticsearch/elasticsearch-setindex",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "side": 0,
       "message": "This script is called by supervisor. Supervisor config comes from configmap.\nSo even if we move this script back to container, supervisor depends on mount.\nShould I move everything from configmap to container to minimise mounting?\nThe problem is that half of the content is in container, other half is in configmap, so we need to modify two repos all the time.",
       "parentUuid": "16cbc862_bd259f53",
+      "revId": "e44199dbf3af9d714be1e8717707eb8ad661239f",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cde3393d_4e97bb0a",
+        "filename": "docker-build/elasticsearch/elasticsearch-setindex",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-09-13T15:14:44Z",
+      "side": 0,
+      "message": "yeah I feel you. I\u0027m in favour of all scripts going to images, reading some config values from the container\u0027s context (if required at all)\neither through configmaps, or from env variable. that is what configmaps are for, they are not file stores",
+      "parentUuid": "8aafdbf4_41ef4dab",
       "revId": "e44199dbf3af9d714be1e8717707eb8ad661239f",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
