@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4e2588c0_dc00253a",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-09-13T14:38:48Z",
+      "side": 0,
+      "message": "we should start using the/a health check and define a liveness probe for ES, rather than deleting the script",
+      "revId": "e44199dbf3af9d714be1e8717707eb8ad661239f",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "16cbc862_bd259f53",
+        "filename": "docker-build/elasticsearch/elasticsearch-setindex",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-09-13T14:38:48Z",
+      "side": 0,
+      "message": "so, a container is called a container because it contains its dependencies\n\ndepending on mounts to be able to work IMO is an anti-pattern",
+      "revId": "e44199dbf3af9d714be1e8717707eb8ad661239f",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
+    }
+  ]
+}
