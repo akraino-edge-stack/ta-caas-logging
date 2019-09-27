@@ -15,8 +15,13 @@
 %define COMPONENT elasticsearch
 %define RPM_NAME caas-%{COMPONENT}
 %define RPM_MAJOR_VERSION 7.3.0
-%define RPM_MINOR_VERSION 1
+%define RPM_MINOR_VERSION 2
 %define IMAGE_TAG %{RPM_MAJOR_VERSION}-%{RPM_MINOR_VERSION}
+%ifarch aarch64
+%define CENTOS_BASE centos@sha256:df89b0a0b42916b5b31b334fd52d3e396c226ad97dfe772848bdd6b00fb42bf0
+%else
+%define CENTOS_BASE centos:7.6.1810
+%endif
 
 Name:           %{RPM_NAME}
 Version:        %{RPM_MAJOR_VERSION}
@@ -24,7 +29,7 @@ Release:        %{RPM_MINOR_VERSION}%{?dist}
 Summary:        Containers as a Service Elasticsearch component
 License:        %{_platform_license} and GNU General Public License v2.0 only and GNU Lesser General Public License v2.1 only and MIT license and BSD and Apache-2.0
 URL:            https://github.com/elastic/elasticsearch
-BuildArch:      x86_64
+BuildArch:      %{_arch}
 Vendor:         %{_platform_vendor} and elastic/elasticsearch unmodified
 Source0:        %{name}-%{version}.tar.gz
 
@@ -49,6 +54,7 @@ docker build \
   --build-arg https_proxy="${https_proxy}" \
   --build-arg no_proxy="${no_proxy}" \
   --build-arg VERSION="%{version}" \
+  --build-arg CENTOS_BASE="%{CENTOS_BASE}" \
   --tag %{COMPONENT}:%{IMAGE_TAG} \
   %{_builddir}/%{RPM_NAME}-%{RPM_MAJOR_VERSION}/docker-build/%{COMPONENT}/
 
