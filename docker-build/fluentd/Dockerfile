@@ -33,12 +33,12 @@ RUN apk update \
         ruby ruby-irb \
         su-exec==${SU_EXEC_VERSION} \
         dumb-init==${DUMB_INIT_VERSION} \
+        libffi-dev \
 &&  apk add --no-cache --virtual .build-deps \
         build-base \
         ruby-dev \
         wget \
         gnupg \
-        libffi-dev \
 &&  update-ca-certificates \
 &&  echo 'gem: --no-document' >> /etc/gemrc \
 &&  gem install oj -v 2.18.3 \
