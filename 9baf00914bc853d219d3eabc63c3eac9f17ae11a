@@ -16,6 +16,24 @@
       "revId": "9baf00914bc853d219d3eabc63c3eac9f17ae11a",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94c17ed_5d86f1e4",
+        "filename": "SPECS/elasticsearch.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-10-11T11:42:00Z",
+      "side": 1,
+      "message": "referring to my comment on the other review: like here\njust without branching, using the same base image, pulled by hash instead of tag",
+      "parentUuid": "3832e466_85996ca1",
+      "revId": "9baf00914bc853d219d3eabc63c3eac9f17ae11a",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
     }
   ]
 }
