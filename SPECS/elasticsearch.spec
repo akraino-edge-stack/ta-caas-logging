@@ -14,8 +14,8 @@
 
 %define COMPONENT elasticsearch
 %define RPM_NAME caas-%{COMPONENT}
-%define RPM_MAJOR_VERSION 7.3.0
-%define RPM_MINOR_VERSION 2
+%define RPM_MAJOR_VERSION 7.4.0
+%define RPM_MINOR_VERSION 0
 %define IMAGE_TAG %{RPM_MAJOR_VERSION}-%{RPM_MINOR_VERSION}
 %define centos_build 191001
 
