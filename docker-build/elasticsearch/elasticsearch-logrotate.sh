@@ -15,7 +15,7 @@
 
 FS_LIMIT=80
 DOCS_DROP=100000
-ES_URL="http://localhost:$ELASTICSEARCH_LOGGING_SERVICE_PORT"
+ES_URL="http://localhost:$ELASTICSEARCH_SERVICE_PORT"
 
 log () {
     echo "LOGROTATE: $*" >/proc/1/fd/1
@@ -23,13 +23,7 @@ log () {
 
 log "hourly job started"
 
-IFS='-' read es type num <<< "$HOSTNAME"
-if [[ "$type" != "data" ]]; then
-    log "non-data node -> exiting"
-    exit 0
-fi
-
-# sleep to avoid concurrent runs across multiple ES data Pods
+# sleep to avoid concurrent runs across multiple ES Pods
 let "SLEEP=($num * 600)+($RANDOM % 30)"
 log "sleeping $SLEEP seconds..."
 sleep $SLEEP

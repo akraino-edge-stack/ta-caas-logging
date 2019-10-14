@@ -16,7 +16,7 @@
 ack="false"
 while [ "$ack" != "true" ]
 do
-  response=$(curl -sS -XPUT "http://localhost:$ELASTICSEARCH_LOGGING_SERVICE_PORT/_template/default_template" -H 'Content-Type: application/json' -d'
+  response=$(curl -sS -XPUT "http://localhost:$ELASTICSEARCH_SERVICE_PORT/_template/default_template" -H 'Content-Type: application/json' -d'
   {
     "index_patterns": ["*"],
     "settings": {
