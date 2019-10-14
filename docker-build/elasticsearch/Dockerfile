@@ -18,12 +18,10 @@ CMD ["/bin/bash"]
 MAINTAINER Levente Kale <levente.kale@nokia.com>
 
 ARG VERSION
-ENV ES_VERSION=$VERSION
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
-ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
 ENV DOWNLOAD_URL "https://artifacts.elastic.co/downloads/elasticsearch"
-ENV ES_TARBAL "${DOWNLOAD_URL}/elasticsearch-oss-${ES_VERSION}-linux-x86_64.tar.gz"
+ENV ES_TARBAL "${DOWNLOAD_URL}/elasticsearch-oss-${VERSION}-linux-x86_64.tar.gz"
 
 WORKDIR /usr/share/elasticsearch
 
@@ -31,7 +29,6 @@ RUN groupadd -g 202 elasticsearch \
 &&  adduser -u 202 -g 202 -d /usr/share/elasticsearch elasticsearch \
 &&  yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
 &&  yum install -y --setopt=skip_missing_names_on_install=False \
-      java-1.8.0-openjdk-headless \
       unzip \
       which \
       coreutils \
@@ -40,12 +37,9 @@ RUN groupadd -g 202 elasticsearch \
 &&  yum clean all \
 &&  curl -fsSL ${ES_TARBAL} | tar zx --strip-components=1 \
 &&  chown -R elasticsearch:elasticsearch /usr/share/elasticsearch \
-# workaround for Elasticsearch: this way ES can list the used plugins, and remove the jdk folder (open jdk slimmer)
-&&  cp -al /usr/share/elasticsearch/modules/* /usr/share/elasticsearch/plugins/ \
-&&  rm -rf /usr/share/elasticsearch/jdk \
-# workaround end
 &&  sed '/GC logging/Q' -i /usr/share/elasticsearch/config/jvm.options   # disable GC logging
 
 COPY elasticsearch-logrotate.sh /etc/cron.hourly/
 COPY elasticsearch-setindex.sh /usr/share/elasticsearch/
 COPY log4j2.properties /usr/share/elasticsearch/config/
+COPY supervisord.conf /etc/
