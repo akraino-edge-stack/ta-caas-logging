@@ -18,12 +18,11 @@ CMD ["/bin/bash"]
 MAINTAINER Levente Kale <levente.kale@nokia.com>
 
 ARG VERSION
-ENV ES_VERSION=$VERSION
 
 ENV PATH /usr/share/elasticsearch/bin:$PATH
-ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
+ENV JAVA_HOME /usr/lib/jvm/jre-13-openjdk
 ENV DOWNLOAD_URL "https://artifacts.elastic.co/downloads/elasticsearch"
-ENV ES_TARBAL "${DOWNLOAD_URL}/elasticsearch-oss-${ES_VERSION}-linux-x86_64.tar.gz"
+ENV ES_TARBAL "${DOWNLOAD_URL}/elasticsearch-oss-${VERSION}-linux-x86_64.tar.gz"
 
 WORKDIR /usr/share/elasticsearch
 
@@ -31,7 +30,7 @@ RUN groupadd -g 202 elasticsearch \
 &&  adduser -u 202 -g 202 -d /usr/share/elasticsearch elasticsearch \
 &&  yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
 &&  yum install -y --setopt=skip_missing_names_on_install=False \
-      java-1.8.0-openjdk-headless \
+      java-latest-openjdk-headless \
       unzip \
       which \
       coreutils \
@@ -49,3 +48,4 @@ RUN groupadd -g 202 elasticsearch \
 COPY elasticsearch-logrotate.sh /etc/cron.hourly/
 COPY elasticsearch-setindex.sh /usr/share/elasticsearch/
 COPY log4j2.properties /usr/share/elasticsearch/config/
+COPY supervisord.conf /etc/
