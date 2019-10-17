@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ede3ce48_2020062f",
+        "filename": "SPECS/elasticsearch.spec",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-10-17T14:21:13Z",
+      "side": 1,
+      "message": "I might have overlooked it in other components as well, but do we even need CentOS in ES RPM?\nIMO it is based on alpine",
+      "revId": "f0e0ff7d87fca007a03f476ce8a8a5d11d431177",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
+    }
+  ]
+}
