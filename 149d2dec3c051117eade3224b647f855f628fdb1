@@ -52,6 +52,24 @@
       "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a2567380_f1f0d678",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 233
+      },
+      "writtenOn": "2019-10-18T09:02:03Z",
+      "side": 1,
+      "message": "This java version is packaged with ES:\nopenjdk version \"13\" 2019-09-17\nOpenJDK Runtime Environment AdoptOpenJDK (build 13+33)\nOpenJDK 64-Bit Server VM AdoptOpenJDK (build 13+33, mixed mode, sharing)\n\nSo it must be supported.",
+      "parentUuid": "9fffed88_7395162c",
+      "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
     }
   ]
 }
