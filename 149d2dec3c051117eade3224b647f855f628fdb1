@@ -88,6 +88,24 @@
       "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a13b79b2_f087b7e3",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 233
+      },
+      "writtenOn": "2019-10-18T09:22:11Z",
+      "side": 1,
+      "message": "OK. So you agree that the consequence is that the ES image grows 150MB.\nI will ask Endre to run ES TC on my test env.",
+      "parentUuid": "294440da_7f819b9d",
+      "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
     }
   ]
 }
