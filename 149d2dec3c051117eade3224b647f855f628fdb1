@@ -70,6 +70,24 @@
       "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "294440da_7f819b9d",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-10-18T09:12:40Z",
+      "side": 1,
+      "message": "yeah I think they just forgot to update the matrix, but the date is the GA version\nso, summarizing, IMO using existing JDK is okay, and is the desired way\nthe workaround parts might be deleted (needs to be tested), but we shall continue to roll with 13",
+      "parentUuid": "a2567380_f1f0d678",
+      "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
     }
   ]
 }
