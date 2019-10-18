@@ -106,6 +106,24 @@
       "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a20f6a0_8c7cb932",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 183
+      },
+      "writtenOn": "2019-10-18T09:42:05Z",
+      "side": 1,
+      "message": "no, the opposite! :D\nwhat you deleted in the current review is the DELETION of the 1.8 JDK\nthat was my my comment: don\u0027t do that, and let\u0027s continue running with JDK 13\nthe extra 100-150MB is the JDK 1.8, which would now become part of the image if you delete the deletion",
+      "parentUuid": "a13b79b2_f087b7e3",
+      "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
     }
   ]
 }
