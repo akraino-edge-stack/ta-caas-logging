@@ -16,6 +16,24 @@
       "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fbc67184_d0cdec97",
+        "filename": "docker-build/elasticsearch/Dockerfile",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 233
+      },
+      "writtenOn": "2019-10-18T08:22:53Z",
+      "side": 1,
+      "message": "The new image is ~150MB bigger than before.\n\nWhat we need to consider:\n- the packaged java version is 5 generation newer (13 vs. 1.8), maybe it has better memory/heap/GC handling\n- I guess they have a good reason to package a specific version/edition of java, it is more tested together\n- I don\u0027t know whether the packaged java is customized in any way (custom code or config files) to optimize it for ES or a stock java is used\n- openjdk 1.8.0 is officially supported by ES, though\n\nWhat is your opinion?",
+      "parentUuid": "60b4fa44_6296daaa",
+      "revId": "149d2dec3c051117eade3224b647f855f628fdb1",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": true
     }
   ]
 }
