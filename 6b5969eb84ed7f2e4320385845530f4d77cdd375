@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "05abc90f_34af1c45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 43
+      },
+      "writtenOn": "2019-11-19T13:45:17Z",
+      "side": 1,
+      "message": "For future reference, please include version numbers in the subject line. Take a look at how this appears in the oneline log and how much more useful commits 063bf94 and 18a4bea  are compared to 6b5969e, 3410504 and 322854b,\n\n 6b5969e New versions released\n 063bf94 Fluentd to 1.7.3, Elasticsearch to 7.4.0\n e4c698f Simplify ElasticSearch to make it more robust\n f0e0ff7 AArch64 support\n dbb5262 Add ES data rotate \u0026 cleanup\n e44199d Merge \"Add CaaS Logging REST API and CLI plugins\"\n 90e74b6 Add CaaS Logging REST API and CLI plugins\n 18a4bea Elasticsearch update to 7.3.0\n 3410504 3rd party component update\n 322854b Elasticsearch and Fluentd update\n a34794c Elastic rpm spec update\n 0314fa2 Elasticsearch oss package\n 640bfd5 Hybrid logging\n 63dde83 Compress image using xz\n 2bd006e Elastic slimming\n 780da3e Logging container update\n 2df5333 Logging containers updated\n e71a84d Set time zone\n 229e54e Added seed code for caas-logging.\n 9afa6af Initial empty repository",
+      "revId": "6b5969eb84ed7f2e4320385845530f4d77cdd375",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": false
+    }
+  ]
+}
