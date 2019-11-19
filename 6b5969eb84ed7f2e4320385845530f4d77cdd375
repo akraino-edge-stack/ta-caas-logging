@@ -16,6 +16,24 @@
       "revId": "6b5969eb84ed7f2e4320385845530f4d77cdd375",
       "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9d2d8cab_bdc8ef9a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 185
+      },
+      "writtenOn": "2019-11-19T13:56:23Z",
+      "side": 1,
+      "message": "I think you need to change the way you look at the commits.\nI think my commit message is informative enought to",
+      "parentUuid": "05abc90f_34af1c45",
+      "revId": "6b5969eb84ed7f2e4320385845530f4d77cdd375",
+      "serverId": "4cada01b-0314-4fe0-84a1-f9ddc89863f9",
+      "unresolved": false
     }
   ]
 }
